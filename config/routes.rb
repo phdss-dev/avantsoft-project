@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :clients
   resource :session
   resources :passwords, param: :token
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -9,4 +10,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  match "*any", to: "application#handle_routing_error", via: :all
 end
