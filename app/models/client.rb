@@ -1,4 +1,5 @@
 class Client < ApplicationRecord
+  has_many :sales
   normalizes :email, with: ->(e) { e.strip.downcase }
 
   validates :name, :email, :birthdate, presence: true
