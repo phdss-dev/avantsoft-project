@@ -2,9 +2,8 @@ class ClientsController < ApplicationController
   before_action :set_client, only: %i[show update destroy]
 
   def index
-    @clients = Client.all
-
-    render json: @clients
+    @q = Client.ransack(params[:q])
+    @clients = @q.result(distinct: true)
   end
 
   def show
