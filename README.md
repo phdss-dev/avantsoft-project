@@ -4,9 +4,9 @@ API para gerenciamento de clientes e vendas, com estatísticas e autenticação.
 
 ## Pré-requisitos
 
-* Docker & Docker Compose instalados
-* Ruby 3.4.5
-* Bundler (`gem install bundler`)
+- Docker & Docker Compose instalados
+- Ruby 3.4.5
+- Bundler (`gem install bundler`)
 
 ---
 
@@ -14,15 +14,16 @@ API para gerenciamento de clientes e vendas, com estatísticas e autenticação.
 
 O projeto utiliza Docker Compose para subir o banco PostgreSQL.
 
-1. Copie o `.env.example` para `.env` e configure se necessário.
-2. Suba os containers com:
+0. Com base no arquivo `.env.example` crie os seguintes arquivos: `.env.development` e `.env.test` e configure conforme necessário.
+
+1. Suba os containers com:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 3. Faça o setup inicial (criar banco, rodar migrations e seeds) com o comando abaixo:
-OBS: A seed irá criar um usuário admin e popular as tabelas de clients e sales.
+   OBS: A seed irá criar um usuário admin e alguns poucos registros para as tabelas de `clients` e `sales`.
 
 ```bash
 rails db:setup
@@ -36,8 +37,8 @@ Para iniciar o servidor Rails, execute:
 
 ```bash
 rails server
-ou 
-r s 
+ou
+r s (atalho)
 ```
 
 A API ficará disponível em:
@@ -64,7 +65,7 @@ bundle exec rspec
 RAILS_ENV=test rails rswag
 ```
 
-* Isso executa os testes de integração que também alimentam o Swagger com exemplos reais.
+- Isso executa os testes de integração que também alimentam o Swagger com exemplos reais.
 
 ---
 
@@ -76,6 +77,6 @@ O Swagger UI está disponível dentro da aplicação Rails:
 http://localhost:3000/api-docs
 ```
 
-* Aqui você verá todos os endpoints documentados.
-* Os exemplos de request/response vêm diretamente dos testes executados pelo **Rswag**.
-* Você pode testar os endpoints diretamente pelo Swagger UI, usando o token gerado ao fazer login para autenticação.
+- Aqui você verá todos os endpoints documentados.
+- Os exemplos de request/response vêm diretamente dos testes executados pelo **Rswag**.
+- Você pode testar os endpoints diretamente pelo Swagger UI, usando o token gerado ao fazer login para autenticação.
