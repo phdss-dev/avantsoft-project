@@ -22,7 +22,7 @@ O projeto utiliza Docker Compose para subir o banco PostgreSQL.
 docker compose up -d
 ```
 
-3. Faça o setup inicial (criar banco, rodar migrations e seeds) com o comando abaixo:
+3. Faça o setup inicial (criar banco de desenvolvimento, rodar migrations e seeds) com o comando abaixo:
    OBS: A seed irá criar um usuário admin e alguns poucos registros para as tabelas de `clients` e `sales`.
 
 ```bash
@@ -33,7 +33,13 @@ rails db:setup
 
 ## Rodando a aplicação
 
-Para iniciar o servidor Rails, execute:
+Resolva as dependencias com o comando:
+
+```bash
+bundle install
+```
+
+e inicie o servidor Rails, com:
 
 ```bash
 rails server
@@ -52,6 +58,13 @@ http://localhost:3000
 ## Executando os testes
 
 O projeto utiliza **RSpec** + **Rswag**.
+
+- Antes de tudo crie o banco de teste, com os seguintes comandos:
+
+````bash
+rails db:create RAILS_ENV=test
+rails db:schema:load RAILS_ENV=test
+```
 
 1. Para rodar os testes RSpec comuns:
 
@@ -80,3 +93,4 @@ http://localhost:3000/api-docs
 - Aqui você verá todos os endpoints documentados.
 - Os exemplos de request/response vêm diretamente dos testes executados pelo **Rswag**.
 - Você pode testar os endpoints diretamente pelo Swagger UI, usando o token gerado ao fazer login para autenticação.
+````
