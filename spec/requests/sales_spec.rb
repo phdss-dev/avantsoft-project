@@ -1,108 +1,73 @@
 require "rails_helper"
 
 RSpec.describe "/sales", type: :request do
+  let!(:user) { User.create!(name: "admin", email_address: "admin@example.com", password: "password", role: 0) }
+  let(:token) { user.sessions.create!(user_agent: "RSpec", ip_address: "127.0.0.1").token }
+  let(:client) { Client.create!(name: "client", email: "client@example.com", birthdate: Date.new(2001, 1, 1)) }
+
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+      value: 100,
+      date: Date.today,
+      description: "dummy sale",
+      client_id: client.id
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+      value: "valor",
+      date: Date.today,
+      description: "dummy sale",
+      client_id: nil
+    }
   }
 
   let(:valid_headers) {
-    {}
+    {"Authorization" => token.to_s}
   }
 
-  describe "GET /index" do
-    it "renders a successful response" do
-      Sale.create! valid_attributes
-      get sales_url, headers: valid_headers, as: :json
-      expect(response).to be_successful
-    end
-  end
-
-  describe "GET /show" do
-    it "renders a successful response" do
-      sale = Sale.create! valid_attributes
-      get sale_url(sale), as: :json
-      expect(response).to be_successful
-    end
-  end
-
   describe "POST /create" do
-    context "with valid parameters" do
-      it "creates a new Sale" do
+    context "when there is a valid client" do
+      it "creates a new sale" do
         expect {
           post sales_url,
-            params: { sale: valid_attributes }, headers: valid_headers, as: :json
+            params: {sale: valid_attributes}, headers: valid_headers, as: :json
         }.to change(Sale, :count).by(1)
+
+        expect(response).to have_http_status(:created)
       end
 
       it "renders a JSON response with the new sale" do
         post sales_url,
-          params: { sale: valid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:created)
-        expect(response.content_type).to match(a_string_including("application/json"))
+          params: {sale: valid_attributes}, headers: valid_headers, as: :json
+
+        body = JSON.parse(response.body)
+        expect(body["value"]).to eq(valid_attributes[:value])
+        expect(body["description"]).to eq(valid_attributes[:description])
+        expect(Date.parse(body["date"])).to eq(valid_attributes[:date])
       end
     end
 
-    context "with invalid parameters" do
-      it "does not create a new Sale" do
+    context "when there is an INVALID client" do
+      it "does not create a new sale" do
         expect {
           post sales_url,
-            params: { sale: invalid_attributes }, as: :json
+            params: {sale: invalid_attributes}, headers: valid_headers, as: :json
         }.to change(Sale, :count).by(0)
+
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "renders a JSON response with errors for the new sale" do
         post sales_url,
-          params: { sale: invalid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:unprocessable_content)
-        expect(response.content_type).to match(a_string_including("application/json"))
+          params: {sale: invalid_attributes}, headers: valid_headers, as: :json
+
+        body = JSON.parse(response.body)
+
+        expect(body["value"]).to include("is not a number")
+        expect(body["client"]).to include("must exist")
       end
-    end
-  end
-
-  describe "PATCH /update" do
-    context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested sale" do
-        sale = Sale.create! valid_attributes
-        patch sale_url(sale),
-          params: { sale: new_attributes }, headers: valid_headers, as: :json
-        sale.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "renders a JSON response with the sale" do
-        sale = Sale.create! valid_attributes
-        patch sale_url(sale),
-          params: { sale: new_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:ok)
-        expect(response.content_type).to match(a_string_including("application/json"))
-      end
-    end
-
-    context "with invalid parameters" do
-      it "renders a JSON response with errors for the sale" do
-        sale = Sale.create! valid_attributes
-        patch sale_url(sale),
-          params: { sale: invalid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:unprocessable_content)
-        expect(response.content_type).to match(a_string_including("application/json"))
-      end
-    end
-  end
-
-  describe "DELETE /destroy" do
-    it "destroys the requested sale" do
-      sale = Sale.create! valid_attributes
-      expect {
-        delete sale_url(sale), headers: valid_headers, as: :json
-      }.to change(Sale, :count).by(-1)
     end
   end
 end

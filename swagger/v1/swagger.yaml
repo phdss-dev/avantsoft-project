@@ -1,0 +1,627 @@
+---
+openapi: 3.0.1
+info:
+  title: Avantsoft API
+  version: v1
+paths:
+  "/clients":
+    get:
+      summary: list clients
+      tags:
+      - Clients
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      clients:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            email:
+                              type: string
+                            birthdate:
+                              type: string
+                              format: date
+                            created_at:
+                              type: string
+                              format: date-time
+                            updated_at:
+                              type: string
+                              format: date-time
+                          required:
+                          - id
+                          - name
+                          - email
+                          - birthdate
+                    required:
+                    - clients
+                required:
+                - data
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                - error
+    post:
+      summary: create client
+      tags:
+      - Clients
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: client created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  client:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      birthdate:
+                        type: string
+                        format: date
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    type: string
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                - error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                birthdate:
+                  type: string
+                  format: date
+              required:
+              - name
+              - email
+              - birthdate
+  "/clients/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show client
+      tags:
+      - Clients
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+    patch:
+      summary: update client
+      tags:
+      - Clients
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                - error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                birthdate:
+                  type: string
+                  format: date
+    put:
+      summary: update client
+      tags:
+      - Clients
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                - error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                birthdate:
+                  type: string
+                  format: date
+    delete:
+      summary: delete client
+      tags:
+      - Clients
+      security:
+      - bearer_auth: []
+      responses:
+        '204':
+          description: no content
+        '401':
+          description: unauthorized
+  "/sales":
+    get:
+      summary: list sales
+      tags:
+      - Sales
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    client_id:
+                      type: integer
+                    value:
+                      type: integer
+                    date:
+                      type: string
+                      format: date-time
+                    description:
+                      type: string
+                      nullable: true
+                    created_at:
+                      type: string
+                      format: date-time
+                    updated_at:
+                      type: string
+                      format: date-time
+                  required:
+                  - id
+                  - client_id
+                  - value
+                  - date
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                - error
+    post:
+      summary: create sale
+      tags:
+      - Sales
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: sale created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sale:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      client_id:
+                        type: integer
+                      value:
+                        type: integer
+                      date:
+                        type: string
+                        format: date-time
+                      description:
+                        type: string
+                        nullable: true
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+        '422':
+          description: invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    type: string
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                - error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                client_id:
+                  type: integer
+                value:
+                  type: integer
+                date:
+                  type: string
+                  format: date-time
+                description:
+                  type: string
+              required:
+              - client_id
+              - value
+              - date
+  "/sales/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: sale id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show sale
+      tags:
+      - Sales
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+    patch:
+      summary: update sale
+      tags:
+      - Sales
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                - error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: integer
+                description:
+                  type: string
+    put:
+      summary: update sale
+      tags:
+      - Sales
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: successful
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                - error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: integer
+                description:
+                  type: string
+    delete:
+      summary: delete sale
+      tags:
+      - Sales
+      security:
+      - bearer_auth: []
+      responses:
+        '204':
+          description: no content
+        '401':
+          description: unauthorized
+  "/session":
+    post:
+      summary: Authenticate user (login)
+      tags:
+      - Authentication
+      parameters: []
+      responses:
+        '200':
+          description: authenticated
+        '401':
+          description: invalid credentials
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email_address:
+                  type: string
+                  example: admin@example.com
+                password:
+                  type: string
+                  example: password
+              required:
+              - email_address
+              - password
+  "/statistics/sales_per_day":
+    get:
+      summary: sales per day
+      tags:
+      - Statistics
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    client_id:
+                      type: integer
+                    value:
+                      type: integer
+                    date:
+                      type: string
+                      format: date-time
+                    description:
+                      type: string
+                      nullable: true
+                    created_at:
+                      type: string
+                      format: date-time
+                    updated_at:
+                      type: string
+                      format: date-time
+                  required:
+                  - id
+                  - client_id
+                  - value
+                  - date
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                - error
+  "/statistics/top_clients":
+    get:
+      summary: top clients
+      tags:
+      - Statistics
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  top_volume:
+                    type: object
+                    properties:
+                      client:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          email:
+                            type: string
+                          birthdate:
+                            type: string
+                            format: date
+                          created_at:
+                            type: string
+                            format: date-time
+                          updated_at:
+                            type: string
+                            format: date-time
+                      total:
+                        type: integer
+                  top_average:
+                    type: object
+                    properties:
+                      client:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          email:
+                            type: string
+                          birthdate:
+                            type: string
+                            format: date
+                          created_at:
+                            type: string
+                            format: date-time
+                          updated_at:
+                            type: string
+                            format: date-time
+                      average:
+                        type: integer
+                  top_frequency:
+                    type: object
+                    properties:
+                      client:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          email:
+                            type: string
+                          birthdate:
+                            type: string
+                            format: date
+                          created_at:
+                            type: string
+                            format: date-time
+                          updated_at:
+                            type: string
+                            format: date-time
+                      unique_days:
+                        type: integer
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                - error
+components:
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: Token
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000

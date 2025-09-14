@@ -8,11 +8,10 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   endUser.create!(email: 'user@email.com', password: '123456', role: :admin)User.create!(email: 'user@email.com', password: '123456', role: :admin)User.create!(email: 'user@email.com', password: '123456', role: :admin)User.create!(email: 'user@email.com', password: '123456', role: :admin)User.create!(email: 'user@email.com', password: '123456', role: :admin)User.create!(email: 'user@email.com', password: '123456', role: :admin)User.create!(email: 'user@email.com', password: '123456', role: :admin)
 
-user = User.find_or_initialize_by(email_address: "user@email.com")
-
-if user
-  puts "Admin user already exists in database"
-else
-  user = User.create!(email_address: "user@email.com", name: "admin", password: "123456", role: 0)
+user = User.find_or_initialize_by(email_address: "admin@example.com")
+if user.new_record?
+  user = User.create!(email_address: "admin@example.com", name: "admin_user", password: "password", role: 0)
   puts "Admin user #{user.name} has been created."
+else
+  puts "Admin user already exists in database"
 end

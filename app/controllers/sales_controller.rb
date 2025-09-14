@@ -17,7 +17,7 @@ class SalesController < ApplicationController
     if @sale.save
       render json: @sale, status: :created, location: @sale
     else
-      render json: @sale.errors, status: :unprocessable_entity
+      render json: @sale.errors, status: :unprocessable_content
     end
   end
 
@@ -25,7 +25,7 @@ class SalesController < ApplicationController
     if @sale.update(sale_params)
       render json: @sale
     else
-      render json: @sale.errors, status: :unprocessable_entity
+      render json: @sale.errors, status: :unprocessable_content
     end
   end
 

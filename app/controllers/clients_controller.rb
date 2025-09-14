@@ -16,7 +16,7 @@ class ClientsController < ApplicationController
     if @client.save
       render json: @client, status: :created, location: @client
     else
-      render json: @client.errors, status: :unprocessable_entity
+      render json: @client.errors, status: :unprocessable_content
     end
   end
 
@@ -24,12 +24,13 @@ class ClientsController < ApplicationController
     if @client.update(client_params)
       render json: @client
     else
-      render json: @client.errors, status: :unprocessable_entity
+      render json: @client.errors, status: :unprocessable_content
     end
   end
 
   def destroy
     @client.destroy!
+    head :no_content
   end
 
   private
@@ -39,6 +40,6 @@ class ClientsController < ApplicationController
   end
 
   def client_params
-    params.expect(client: [ :name, :email, :birthdate ])
+    params.expect(client: [:name, :email, :birthdate])
   end
 end
