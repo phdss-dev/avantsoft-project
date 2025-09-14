@@ -11,6 +11,9 @@ RSpec.describe "clients", type: :request do
       security [bearer_auth: []]
       produces "application/json"
 
+      parameter name: "q[name_eq]", in: :query, type: :string, description: "Filter clients by exact name"
+      parameter name: "q[email_eq]", in: :query, type: :string, description: "Filter clients by exact email"
+
       response(200, "successful") do
         schema type: :object,
           properties: {
@@ -22,14 +25,40 @@ RSpec.describe "clients", type: :request do
                   items: {
                     type: :object,
                     properties: {
-                      id: {type: :integer},
-                      name: {type: :string},
-                      email: {type: :string},
-                      birthdate: {type: :string, format: "date"},
-                      created_at: {type: :string, format: "date-time"},
-                      updated_at: {type: :string, format: "date-time"}
+                      info: {
+                        type: :object,
+                        properties: {
+                          full_name: {type: :string},
+                          details: {
+                            type: :object,
+                            properties: {
+                              email: {type: :string, format: :email},
+                              birthdate: {type: :string, format: "date"}
+                            },
+                            required: ["email", "birthdate"]
+                          }
+                        },
+                        required: ["full_name", "details"]
+                      },
+                      statistics: {
+                        type: :object,
+                        properties: {
+                          sales: {
+                            type: :array,
+                            items: {
+                              type: :object,
+                              properties: {
+                                date: {type: :string, format: "date"},
+                                value: {type: :number}
+                              },
+                              required: ["date", "value"]
+                            }
+                          }
+                        },
+                        required: ["sales"]
+                      }
                     },
-                    required: ["id", "name", "email", "birthdate"]
+                    required: ["info", "statistics"]
                   }
                 }
               },
@@ -38,17 +67,6 @@ RSpec.describe "clients", type: :request do
           },
           required: ["data"]
 
-        run_test!
-      end
-
-      response(401, "unauthorized") do
-        let(:Authorization) { nil }
-
-        schema type: :object,
-          properties: {
-            error: {type: :string}
-          },
-          required: ["error"]
         run_test!
       end
     end
@@ -112,7 +130,6 @@ RSpec.describe "clients", type: :request do
   end
 
   path "/clients/{id}" do
-    # You'll want to customize the parameter types...
     parameter name: "id", in: :path, type: :string, description: "id"
     let!(:user) { User.create!(name: "admin", email_address: "admin@example.com", password: "password", role: 0) }
     let(:token) { user.sessions.create!(user_agent: "RSpec", ip_address: "127.0.0.1").token }

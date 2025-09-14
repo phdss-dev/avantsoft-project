@@ -11,6 +11,17 @@ paths:
       - Clients
       security:
       - bearer_auth: []
+      parameters:
+      - name: q[name_eq]
+        in: query
+        description: Filter clients by exact name
+        schema:
+          type: string
+      - name: q[email_eq]
+        in: query
+        description: Filter clients by exact email
+        schema:
+          type: string
       responses:
         '200':
           description: successful
@@ -27,41 +38,51 @@ paths:
                         items:
                           type: object
                           properties:
-                            id:
-                              type: integer
-                            name:
-                              type: string
-                            email:
-                              type: string
-                            birthdate:
-                              type: string
-                              format: date
-                            created_at:
-                              type: string
-                              format: date-time
-                            updated_at:
-                              type: string
-                              format: date-time
+                            info:
+                              type: object
+                              properties:
+                                full_name:
+                                  type: string
+                                details:
+                                  type: object
+                                  properties:
+                                    email:
+                                      type: string
+                                      format: email
+                                    birthdate:
+                                      type: string
+                                      format: date
+                                  required:
+                                  - email
+                                  - birthdate
+                              required:
+                              - full_name
+                              - details
+                            statistics:
+                              type: object
+                              properties:
+                                sales:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      date:
+                                        type: string
+                                        format: date
+                                      value:
+                                        type: number
+                                    required:
+                                    - date
+                                    - value
+                              required:
+                              - sales
                           required:
-                          - id
-                          - name
-                          - email
-                          - birthdate
+                          - info
+                          - statistics
                     required:
                     - clients
                 required:
                 - data
-        '401':
-          description: unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                required:
-                - error
     post:
       summary: create client
       tags:
