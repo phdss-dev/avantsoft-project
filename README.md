@@ -63,7 +63,6 @@ O projeto utiliza **RSpec** + **Rswag**.
 
 ````bash
 rails db:create RAILS_ENV=test
-rails db:schema:load RAILS_ENV=test
 ```
 
 1. Para rodar os testes RSpec comuns:

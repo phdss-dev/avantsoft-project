@@ -67,7 +67,16 @@ RSpec.describe "clients", type: :request do
           },
           required: ["data"]
 
-        run_test!
+        it "returns 200 and filters clients" do
+          get "/clients",
+            params: {"q[name_eq]" => "", "q[email_eq]" => ""},
+            headers: {
+              Authorization: token,
+              Accept: "application/json"
+            }
+
+          expect(response).to have_http_status(:ok)
+        end
       end
     end
 
