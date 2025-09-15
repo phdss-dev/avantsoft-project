@@ -61,7 +61,7 @@ O projeto utiliza **RSpec** + **Rswag**.
 
 - Antes de tudo crie o banco de teste, com os seguintes comandos:
 
-````bash
+```bash
 rails db:create RAILS_ENV=test
 ```
 
