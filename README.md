@@ -92,4 +92,3 @@ http://localhost:3000/api-docs
 - Aqui você verá todos os endpoints documentados.
 - Os exemplos de request/response vêm diretamente dos testes executados pelo **Rswag**.
 - Você pode testar os endpoints diretamente pelo Swagger UI, usando o token gerado ao fazer login para autenticação.
-````
